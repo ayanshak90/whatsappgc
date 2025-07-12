@@ -5,12 +5,11 @@ import readline from 'readline';
 import chalk from 'chalk';
 import dns from 'dns/promises';
 
-// Setup readline interface
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-const question = (text) => new Promise((resolve) => rl.question(text, resolve));
-
-// Animated banner
+// === Animated Banner ===
 console.clear();
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const question = (text) => new Promise(resolve => rl.question(text, resolve));
+
 const bannerLines = [
   "      ___           ___           ___           ___           ___           ___     ",
   "     /\\  \\         |\\__\\         /\\  \\         /\\__\\         /\\  \\         /\\__\\    ",
@@ -28,11 +27,7 @@ const bannerLines = [
   "║             𝗩𝟵𝗠𝗣𝗜𝗥𝟯 𝗥𝗨𝗟𝟯𝗫 𝗢𝗪𝗡𝟯𝗥 𝟵𝗬𝟵𝗡𝗦𝗛 𝗛𝟯𝗥𝟯 🩵              ║",
   "╚════════════════════════════════════════════════════════╝",
   "Author     : AY9NSH H3R3",
-  "Brother    : ALONE ST9ND AY9NSH",
-  "GitHub     : WHATSAPP MESSAGE SENDER",
-  "Facebook   : AY9NSH",
-  "Tool Name  : WHATSAPP TOOL",
-  "Type       : NOT FREE BY AY9NSH TOOL",
+  "Tool Name  : WhatsApp Auto Messenger",
   "────────────────────────────────────────────────────────────",
   "𖣘︎𖣘︎𖣘︎︻╦デ╤━╼【★ AY9NSH TOOL OWNER ★】╾━╤デ╦︻𖣘︎𖣘︎𖣘︎",
   "────────────────────────────────────────────────────────────",
@@ -46,9 +41,11 @@ for (const line of bannerLines) {
   console.log(chalk.hex('#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'))(line));
 }
 
+// === Global Variables ===
 let target, targetName, intervalTime, messages = [], msgIndex = 0;
 let sock = null;
 
+// === File Reader ===
 const readMessagesFromFiles = async (filePaths) => {
   let messages = [];
   for (const filePath of filePaths) {
@@ -63,6 +60,7 @@ const readMessagesFromFiles = async (filePaths) => {
   return messages;
 };
 
+// === Internet Check ===
 const waitForInternet = async () => {
   while (true) {
     try {
@@ -75,6 +73,7 @@ const waitForInternet = async () => {
   }
 };
 
+// === Message Sender Loop ===
 const sendMessageLoop = async () => {
   while (true) {
     try {
@@ -89,7 +88,20 @@ const sendMessageLoop = async () => {
         await sock.sendMessage(target, { text: fullMsg });
       }
 
-      console.log(chalk.green(`[✓] ${time} Message sent: ${fullMsg}`));
+      console.log(chalk.hex('#9B30FF')(`
+╔═════════════════════════════════════════════════╗
+║            🧛‍♂️ MESSAGE SENT LOG [VR TOOL]           ║
+╠═════════════════════════════════════════════════╣
+║ 🕒 Time       : ${time}
+║ 🎯 Target     : ${targetName}
+║ 📞 Number/UID : ${target}
+║ 💬 Message    : ${raw}
+╠═════════════════════════════════════════════════╣
+║ ✅ Status     : Delivered Successfully
+╚═════════════════════════════════════════════════╝
+        ⚔️ Sent by Vampire Rulex Tool ⚔️
+`));
+
       msgIndex = (msgIndex + 1) % messages.length;
       await new Promise(res => setTimeout(res, intervalTime * 1000));
     } catch (err) {
@@ -99,6 +111,7 @@ const sendMessageLoop = async () => {
   }
 };
 
+// === WhatsApp Socket ===
 const connect = async () => {
   const { state, saveCreds } = await useMultiFileAuthState('./session');
 
@@ -173,4 +186,5 @@ const connect = async () => {
   });
 };
 
+// === Start the bot ===
 connect();
