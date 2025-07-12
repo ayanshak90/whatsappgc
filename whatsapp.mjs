@@ -5,12 +5,12 @@ import readline from 'readline';
 import chalk from 'chalk';
 import dns from 'dns/promises';
 
+// Setup readline interface
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 
-let target, targetName, intervalTime, messages = [], msgIndex = 0;
-let sock = null;
-
+// Animated banner
+console.clear();
 const bannerLines = [
   "      ___           ___           ___           ___           ___           ___     ",
   "     /\\  \\         |\\__\\         /\\  \\         /\\__\\         /\\  \\         /\\__\\    ",
@@ -40,6 +40,14 @@ const bannerLines = [
   "       𖣘︎𖣘︎𖣘︎【 AY9NSH INSIDE 】𖣘︎𖣘︎𖣘︎",
   "────────────────────────────────────────────────────────────"
 ];
+
+for (const line of bannerLines) {
+  await new Promise(res => setTimeout(res, 50));
+  console.log(chalk.hex('#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'))(line));
+}
+
+let target, targetName, intervalTime, messages = [], msgIndex = 0;
+let sock = null;
 
 const readMessagesFromFiles = async (filePaths) => {
   let messages = [];
@@ -165,12 +173,4 @@ const connect = async () => {
   });
 };
 
-// Start with Banner
-console.clear();
-(async () => {
-  for (const line of bannerLines) {
-    await new Promise(res => setTimeout(res, 70));
-    console.log(chalk.hex('#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'))(line));
-  }
-  await connect();
-})();
+connect();
